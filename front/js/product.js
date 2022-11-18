@@ -20,7 +20,8 @@ const informationsKanapDisplay = () => {
   ).innerHTML = `<img src="${informationsKanap.imageUrl}" alt="${informationsKanap.name}">`;
   document.querySelector("#title").innerHTML = informationsKanap.name;
   document.querySelector("#price").innerHTML = informationsKanap.price;
-  document.querySelector("#description").innerHTML = informationsKanap.description;
+  document.querySelector("#description").innerHTML =
+    informationsKanap.description;
 
   /* A For in loop that loops through the colors available in the "colorsKanap" array
     Une boucle "For in" qui parcourt les couleurs disponibles dans le tableau "colorsKanap" */
@@ -48,27 +49,52 @@ fetch("http://localhost:3000/api/products/" + idKanap)
     informationsKanapDisplay();
   });
 
-/* Creation of an event when the "Add to cart" button is clicked which adds the information to the "LocalStorage" so that it can be retrieved 
-Création d'un évènement au clic du bouton "Ajouter au panier" qui ajoute les informations dans le "LocalStorage" pour pouvoir être récupérer */
+// --------------------------------------------------------------------------------
+
+const saveTheBasket = (cartContent) => {
+  localStorage.setItem("basketItems", JSON.stringify(cartContent));
+};
+
+const getFromBasket = () => {
+  let basket = localStorage.getItem("basketItems");
+
+  if (basket == null) {
+    return [];
+  } else {
+    return JSON.parse(basket);
+  }
+};
+
+const addToBasket = (product) => {
+  let basket = getFromBasket();
+
+  let findProduct = basket.find(
+    (p) => p.kanapId == product.kanapId && p.kanapColor == product.kanapColor
+  );
+
+  if (findProduct != undefined) {
+    findProduct.kanapQuantity++;
+  } else {
+    product.kanapQuantity = 1;
+    basket.push(product);
+  }
+
+  saveTheBasket(basket);
+};
+
 cartButton.addEventListener("click", () => {
   let colorKanap = document.querySelector("#colors").value;
   let quantityKanap = document.querySelector("#quantity").value;
 
-  if (colorKanap && quantityKanap !== 0) {
-   
-    let objJson = {
+  if (colorKanap != "" && quantityKanap != "0") {
+    addToBasket({
       kanapId: idKanap,
       kanapColor: colorKanap,
       kanapQuantity: quantityKanap,
-    };
+    });
 
-    let objLinea = JSON.stringify(objJson);
-    localStorage.setItem("kanapToCart", objLinea);
-
+    alert("Produit ajouté au panier avec succès");
   } else {
-    alert = "Veuillez choisir une couleur et une quantité";
+    alert("Veuillez choisir une couleur et une quantité");
   }
 });
-
-console.log(localStorage);
-console.log(document.querySelector("#quantity").value);
