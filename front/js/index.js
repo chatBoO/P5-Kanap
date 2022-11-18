@@ -8,7 +8,7 @@ const kanapDisplay = () => {
     kanapBox.innerHTML += `
         <a href="./product.html?id=${kanapList[i]._id}">
             <article>
-                <img src="${kanapList[i].imageUrl}" alt="canapé : ${kanapList[i].name}">
+                <img src="${kanapList[i].imageUrl}" alt="canapé : ${kanapList[i].altTxt}">
                 <h3 class="productName">${kanapList[i].name}</h3>
                 <p class="productDescription">${kanapList[i].description}</p>
             </article>

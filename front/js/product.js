@@ -7,8 +7,6 @@ Ici on récupère l'ID du produit cliqué sur la page d'accueil pour récupérer
 let url = new URL(window.location.href);
 let id = url.searchParams.get("id");
 
-/* Sofa and colors data retrieved
-Récupération des données du canapé et des couleurs */
 let informationsKanap;
 let colorsKanap;
 
@@ -21,7 +19,7 @@ Fonction qui inétègre les différentes données du canapé dans la page produc
 const informationsKanapDisplay = () => {
   document.querySelector(
     ".item__img"
-  ).innerHTML = `<img src="${informationsKanap.imageUrl}" alt="${informationsKanap.name}">`;
+  ).innerHTML = `<img src="${informationsKanap.imageUrl}" alt="${informationsKanap.altTxt}">`;
   document.querySelector("#title").innerHTML = informationsKanap.name;
   document.querySelector("#price").innerHTML = informationsKanap.price;
   document.querySelector("#description").innerHTML =
