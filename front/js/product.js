@@ -79,9 +79,7 @@ const addToBasket = (product) => {
 
   /* Checks if a sofa stored in the LocalStorage already has the same ID and color, if not so return: "undefined"
   Vérifie si un canapé stocké dans le LocalStorage a déjà le même ID et la même couleur, si c'est pas le cas alors retourne : "undefined" */
-  let findProduct = basket.find(
-    (p) => p.id == product.id && p.color == product.color
-  );
+  let findProduct = basket.find((p) => p.id == product.id && p.color == product.color);
 
     /* If the product already exists in the localStorage with the same id and the same color then we increment the quantity
     Si le produit existe déjà dans le localStorage avec le même id et la même couleur alors on incrémente la quatité */

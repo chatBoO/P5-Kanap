@@ -11,6 +11,12 @@ const getFromBasket = () => {
   }
 };
 
+/* Function that saves cart data in LocalStorage
+Fonction qui sauvegarde les données du panier dans le LocalStorage */
+const saveTheBasket = (cartContent) => {
+    localStorage.setItem("basketItems", JSON.stringify(cartContent));
+  };  
+
 /* Function that retrieves the total number of items in the cart
 Fonction qui récupère le nombre total d'articles dans le panier */
 const getTotalQuantity = () => {
@@ -34,6 +40,18 @@ const getTotalPrice = () => {
 
   return theTotalPrice;
 };
+
+// const changeQuantity = (product, quantity) => {
+//     let basket = getFromBasket();
+// 
+//     let findProduct = basket.find ((p) => p.id == product.id);
+
+//     if (findProduct != undefined) {
+//         findProduct.quantity = quantity;
+//     }
+
+//     saveTheBasket(basket);
+// }
 
 /* Function that injects the contents of the array [basketKanaps] into the code of cart.html
 Fonction qui injecte le contenu du tableau [basketKanaps] dans le code de cart.html */
@@ -67,6 +85,7 @@ const cartDisplay = () => {
     
     document.getElementById("totalQuantity").textContent = getTotalQuantity();
     document.getElementById("totalPrice").textContent = getTotalPrice();
+
 };
 
 let basket = getFromBasket();
@@ -77,40 +96,44 @@ let basketKanaps = [];
 
 
 fetch("http://localhost:3000/api/products")
-  .then((response) => {
+    .then((response) => {
     return response.json();
-  })
+    })
 
-  .then((value) => {
-    kanapList = value;
+    .then((value) => {
+        kanapList = value;
     
-    /* Loops the data from the API, and at each iteration a 2nd loop is launched
-    Boucle les données de l'API, et à chaque itération une 2ème boucle se lance */
-    for (let i = 0; i < kanapList.length; i++) {
-        
-        /* At each iteration of the first loop, we look for a match in the localStorage
-        A chaque itération de la première boucle, on recherche une correspondance dans le localStorage */
-        for (let j = 0; j < basket.length; j++) {
+        /* Loops the data from the API, and at each iteration a 2nd loop is launched
+        Boucle les données de l'API, et à chaque itération une 2ème boucle se lance */
+        for (let i = 0; i < kanapList.length; i++) {
+            
+            /* At each iteration of the first loop, we look for a match in the localStorage
+            A chaque itération de la première boucle, on recherche une correspondance dans le localStorage */
+            for (let j = 0; j < basket.length; j++) {
 
-            if (kanapList[i]._id === basket[j].id) {
+                if (kanapList[i]._id === basket[j].id) {
 
-                /* If a match has been found, the "basketKanap" object is added to the "basketKanaps" array
-                Si une correspondance a été trouvé on ajoute l'objet "basketKanap" dans le tableau "basketKanaps" */
-                let basketKanap = {
-                    id: basket[j].id,
-                    color: basket[j].color,
-                    quantity: basket[j].quantity,
-                    name: kanapList[i].name,
-                    price: kanapList[i].price,
-                    img: kanapList[i].imageUrl,
-                    altTxt: kanapList[i].altTxt,
-                };
-                basketKanaps.push(basketKanap);
+                    /* If a match has been found, the "basketKanap" object is added to the "basketKanaps" array
+                    Si une correspondance a été trouvé on ajoute l'objet "basketKanap" dans le tableau "basketKanaps" */
+                    let basketKanap = {
+                        id: basket[j].id,
+                        color: basket[j].color,
+                        quantity: basket[j].quantity,
+                        name: kanapList[i].name,
+                        price: kanapList[i].price,
+                        img: kanapList[i].imageUrl,
+                        altTxt: kanapList[i].altTxt,
+                    };
+                    basketKanaps.push(basketKanap);
+                }
             }
         }
-    }
-    cartDisplay();
-  });
-
-
+        cartDisplay();
+        console.log(document.querySelectorAll('.itemQuantity'));
+        document.querySelector('.itemQuantity').addEventListener('change', (e) => {
+            test = e.target.value;
+            console.log(test);
+        })
+    });
+ 
 
