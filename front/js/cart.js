@@ -31,13 +31,13 @@ const getTotalQty = () => {
     let totalQuantity = 0;
     let totalPrice = 0;
 
-    for (let i = 0; i < kanapListApi.length; i++) {
+    for (let i = 0; i < basketKanaps.length; i++) {
 
         for (let j = 0; j < basket.length; j++) {
             
-            if (kanapListApi[i]._id === basket[j].id) {
+            if (basketKanaps[i].id === basket[j].id) {
                 totalQuantity += basket[j].quantity;
-                totalPrice += basket[j].quantity * kanapListApi[i].price;
+                totalPrice += basket[j].quantity * basketKanaps[i].price;
             }   
         }
 
@@ -46,14 +46,58 @@ const getTotalQty = () => {
     }
 }
 
-const changeQuantity = (product) => {
+const quantityProduct = (product) => {
     let findProduct = basket.find((p) => p.id == product.id && p.color == product.color);
 
     if (findProduct != undefined) {
         findProduct.quantity = product.quantity;
     }
-
+    
     saveTheBasket(basket);
+}
+
+const changeQuantityProduct = () => {
+    let inputItemQuantity = document.querySelectorAll('.itemQuantity');
+
+    inputItemQuantity.forEach(itemQuantity => {
+
+        itemQuantity.addEventListener('change', (e) => {
+            e.preventDefault();
+
+            let retrieveParentData = itemQuantity.closest('.cart__item');
+
+            quantityProduct ({
+                id: retrieveParentData.dataset.id,
+                color: retrieveParentData.dataset.color,
+                quantity: Number(e.target.value),
+            });
+            
+            getTotalQty();
+        });
+    })
+}
+
+// Suppression d'un produit
+const deleteProduct = () => {
+    let deleteButton = document.querySelectorAll(".deleteItem");
+    console.log(deleteButton);
+
+    deleteButton.forEach(deleteItem => {
+    
+        deleteItem.addEventListener("click" , (e) => {
+            e.preventDefault();
+
+            let retrieveParentData = deleteItem.closest('.cart__item');
+
+            basket = basket.filter( p => p.id !== retrieveParentData.dataset.id || p.color !== retrieveParentData.dataset.color );
+            
+            saveTheBasket(basket);
+
+            //Alerte produit supprimé et refresh
+            alert("Ce produit a bien été supprimé du panier");
+            location.reload();
+        })
+    })
 }
 
 /* Function that injects the contents of the array [basketKanaps] into the code of cart.html
@@ -142,26 +186,7 @@ fetch("http://localhost:3000/api/products")
             }
         }
         cartDisplay();
-
-        let inputItemQuantity = document.querySelectorAll('.itemQuantity');
-
-        // for (let i = 0; i < inputItemQuantity.length; i++) {
-        //     inputItemQuantity[i].addEventListener("change", (e) => {
-        //         let itemQuantityValue = e.target.value;
-        //         console.log(itemQuantityValue[i]);
-        //     });
-        // }
-        
-        inputItemQuantity.forEach(itemQuantity => {
-            itemQuantity.addEventListener('change', (e) => {
-                let retrieveParentData = itemQuantity.closest('.cart__item');
-
-                changeQuantity ({
-                    id: retrieveParentData.dataset.id,
-                    color: retrieveParentData.dataset.color,
-                    quantity: Number(e.target.value),
-                });
-                getTotalQty();
-            });
-        })
+        changeQuantityProduct();
+        deleteProduct();
     })
+
