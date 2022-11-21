@@ -17,25 +17,24 @@ const saveTheBasket = (cartContent) => {
     localStorage.setItem("basketItems", JSON.stringify(cartContent));
   };  
 
+
 const getTotalQty = () => {
     let totalQuantity = 0;
     let totalPrice = 0;
 
-    for (let j = 0; j < basket.length; j++) {
-        let current_index = basketKanaps.findIndex((product) => {
-            return product.id == basket[j].id;
-        });
-        totalQuantity += basket[j].quantity;
-        totalPrice += basket[j].quantity * basketKanaps[current_index].price;
+    for (let i = 0; i < basketKanaps.length; i++) {
+        for (let j = 0; j < basket.length; j++) {
+            if (basketKanaps[i].id === basket[j].id) {
+                totalQuantity += basket[j].quantity;
+                totalPrice += basket[j].quantity * basketKanaps[i].price;
+            }   
+        }
+        document.getElementById("totalQuantity").textContent = totalQuantity;
+        document.getElementById("totalPrice").textContent = totalPrice;
     }
-
-    document.getElementById("totalQuantity").textContent = totalQuantity;
-    document.getElementById("totalPrice").textContent = totalPrice;
 }
 
-
 const changeQuantity = (product) => {
-    // let basket = getFromBasket();
     let findProduct = basket.find((p) => p.id == product.id && p.color == product.color);
 
     if (findProduct != undefined) {
