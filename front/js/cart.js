@@ -17,29 +17,21 @@ const saveTheBasket = (cartContent) => {
     localStorage.setItem("basketItems", JSON.stringify(cartContent));
   };  
 
-/* Function that retrieves the total number of items in the cart
-Fonction qui récupère le nombre total d'articles dans le panier */
-const getTotalQuantity = () => {
-    let theTotalQuantity = 0;
-  
-    for (let product of basket) {
-        theTotalQuantity += product.quantity;
+const getTotalQty = () => {
+    let totalQuantity = 0;
+    let totalPrice = 0;
+
+    for (let j = 0; j < basket.length; j++) {
+        let current_index = basketKanaps.findIndex((product) => {
+            return product.id == basket[j].id;
+        });
+        totalQuantity += basket[j].quantity;
+        totalPrice += basket[j].quantity * basketKanaps[current_index].price;
     }
 
-    return theTotalQuantity;
-};
-
-/* Function that calculates the total amount of items in the cart with API's prices
-Fonction qui calcul le montant total des articles dans le panier avec les prix de l'API [basketKanaps] */
-const getTotalPrice = () => {
-    let theTotalPrice = 0;
-
-    for (let Product of basketKanaps) {
-        theTotalPrice += Product.quantity * Product.price;
-    }
-
-  return theTotalPrice;
-};
+    document.getElementById("totalQuantity").textContent = totalQuantity;
+    document.getElementById("totalPrice").textContent = totalPrice;
+}
 
 
 const changeQuantity = (product) => {
@@ -90,8 +82,7 @@ const cartDisplay = () => {
         `;
     }
     
-    document.getElementById("totalQuantity").textContent = getTotalQuantity();
-    document.getElementById("totalPrice").textContent = getTotalPrice();
+   getTotalQty();
 
     };
 }
@@ -156,7 +147,7 @@ fetch("http://localhost:3000/api/products")
                     color: retrieveParentData.dataset.color,
                     quantity: Number(e.target.value),
                 });
-                document.getElementById("totalQuantity").textContent = getTotalQuantity();
+                getTotalQty();
             });
         })
     })
