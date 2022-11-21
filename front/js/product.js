@@ -72,8 +72,8 @@ const getFromBasket = () => {
   }
 };
 
-/* Function that calls getFromBasket to retrieve basket data
-Fonction qui appelle getFromBasket pour récupérér les données du panier */
+/* Function that calls getFromBasket to retrieve basket data in the LocalStorage
+Fonction qui appelle getFromBasket pour récupérér les données du panier dans le localStorage */
 const addToBasket = (product) => {
   let basket = getFromBasket();
 
@@ -84,7 +84,7 @@ const addToBasket = (product) => {
     /* If the product already exists in the localStorage with the same id and the same color then we increment the quantity
     Si le produit existe déjà dans le localStorage avec le même id et la même couleur alors on incrémente la quatité */
   if (findProduct != undefined) {
-    findProduct.quantity = findProduct.quantity + product.quantity;
+    findProduct.quantity += product.quantity;
     
     /* The result is "undefined" and therefore the product does not exist so we add the product
     Sinon le resultat est "undefined" et donc le produit n'existe pas donc on rajoute le produit */

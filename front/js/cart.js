@@ -29,10 +29,10 @@ const getTotalQuantity = () => {
     return theTotalQuantity;
 };
 
-/* Function that calculates the total amount of items in the cart
-Fonction qui calcul le montant total des articles dans le panier */
+/* Function that calculates the total amount of items in the cart with API's prices
+Fonction qui calcul le montant total des articles dans le panier avec les prix de l'API [basketKanaps] */
 const getTotalPrice = () => {
-  let theTotalPrice = 0;
+    let theTotalPrice = 0;
 
     for (let Product of basketKanaps) {
         theTotalPrice += Product.quantity * Product.price;
@@ -41,21 +41,28 @@ const getTotalPrice = () => {
   return theTotalPrice;
 };
 
-// const changeQuantity = (product, quantity) => {
-//     let basket = getFromBasket();
-// 
-//     let findProduct = basket.find ((p) => p.id == product.id);
 
-//     if (findProduct != undefined) {
-//         findProduct.quantity = quantity;
-//     }
+const changeQuantity = (product) => {
+    // let basket = getFromBasket();
+    let findProduct = basket.find((p) => p.id == product.id && p.color == product.color);
 
-//     saveTheBasket(basket);
-// }
+    if (findProduct != undefined) {
+        findProduct.quantity = product.quantity;
+    }
+
+    saveTheBasket(basket);
+}
 
 /* Function that injects the contents of the array [basketKanaps] into the code of cart.html
 Fonction qui injecte le contenu du tableau [basketKanaps] dans le code de cart.html */
 const cartDisplay = () => {
+
+    if (basket === null || basket == 0) {
+        const emptyCart = `<h2 style="text-align: center">Désolé mais votre panier est vide... </h2> <p style="text-align: center"><a href="../html/index.html">Continuer mon shopping</a></p>`;
+        document.getElementById("cart__items").innerHTML = emptyCart;
+        
+    } else {
+
     for (let i in basketKanaps) {
         document.getElementById("cart__items").innerHTML += 
         `
@@ -86,12 +93,13 @@ const cartDisplay = () => {
     document.getElementById("totalQuantity").textContent = getTotalQuantity();
     document.getElementById("totalPrice").textContent = getTotalPrice();
 
-};
+    };
+}
 
 let basket = getFromBasket();
 
 /* Declaration of an array that retrieves informations of the API of localStorage products 
-Déclaration d'un tableau qui récupèrera les informations de l'API des produits du localStorage */
+Déclaration d'un tableau qui récupèrera les informations via l'API des produits du localStorage */
 let basketKanaps = [];
 
 
@@ -129,11 +137,26 @@ fetch("http://localhost:3000/api/products")
             }
         }
         cartDisplay();
-        console.log(document.querySelectorAll('.itemQuantity'));
-        document.querySelector('.itemQuantity').addEventListener('change', (e) => {
-            test = e.target.value;
-            console.log(test);
-        })
-    });
- 
 
+        let inputItemQuantity = document.querySelectorAll('.itemQuantity');
+
+        // for (let i = 0; i < inputItemQuantity.length; i++) {
+        //     inputItemQuantity[i].addEventListener("change", (e) => {
+        //         let itemQuantityValue = e.target.value;
+        //         console.log(itemQuantityValue[i]);
+        //     });
+        // }
+        
+        inputItemQuantity.forEach(itemQuantity => {
+            itemQuantity.addEventListener('change', (e) => {
+                let retrieveParentData = itemQuantity.closest('.cart__item');
+
+                changeQuantity ({
+                    id: retrieveParentData.dataset.id,
+                    color: retrieveParentData.dataset.color,
+                    quantity: Number(e.target.value),
+                });
+                document.getElementById("totalQuantity").textContent = getTotalQuantity();
+            });
+        })
+    })
