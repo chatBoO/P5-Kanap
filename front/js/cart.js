@@ -1,24 +1,28 @@
-/* Function that retrieves cart data from LocalStorage
+//DECLARATION DES FONCTIONS DE BASE POUR RECUPERER ET ECRIRE DANS LE LOCAL STORAGE
+/*---------------------------------------------------------------------------------
+
+Function that retrieves cart data from LocalStorage
 Fonction qui récupère les données du panier dans le LocalStorage */
 const getFromBasket = () => {
-  let basket = localStorage.getItem("basketItems");
+    let basket = localStorage.getItem("basketItems");
 
-  if (basket == null) {
-    return [];
+    if (basket == null) {
+        return [];
 
-  } else {
-    return JSON.parse(basket);
-  }
+    } else {
+        return JSON.parse(basket);
+    }
 };
 
 /* Function that saves cart data in LocalStorage
 Fonction qui sauvegarde les données du panier dans le LocalStorage */
 const saveTheBasket = (cartContent) => {
     localStorage.setItem("basketItems", JSON.stringify(cartContent));
-  };  
+};  
 
+/* DECLARATION DES FONCTIONS
+//-----------------------------------------------------------------------------------
 
-/* 
 Fonction qui calcule la quantité et le prix total des articles. 
 A chaque itération de la première boucle on lance une deuxième boucle pour trouver une corresponsance d'ID entre les données de l'API et le panier en localStorage :
 Pour la quantité : Si correspondance alors on ajoute la quantité du produit à la valeur TotalQuantity existante.
@@ -93,6 +97,9 @@ const cartDisplay = () => {
 
     };
 }
+
+/* DECLARATION DES VARIABLES GLOBALES ET DE LA FONCTION FETCH
+----------------------------------------------------------------------------------- */
 
 let basket = getFromBasket();
 
