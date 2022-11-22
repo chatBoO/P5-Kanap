@@ -1,8 +1,7 @@
 //DECLARATION DES FONCTIONS DE BASE POUR RECUPERER ET ECRIRE DANS LE LOCAL STORAGE
-/*---------------------------------------------------------------------------------
+//---------------------------------------------------------------------------------
 
-Function that retrieves cart data from LocalStorage
-Fonction qui récupère les données du panier dans le LocalStorage */
+// Fonction qui récupère les données du panier dans le LocalStorage
 const getFromBasket = () => {
     let basket = localStorage.getItem("basketItems");
 
@@ -14,16 +13,15 @@ const getFromBasket = () => {
     }
 };
 
-/* Function that saves cart data in LocalStorage
-Fonction qui sauvegarde les données du panier dans le LocalStorage */
+// Fonction qui sauvegarde les données du panier dans le LocalStorage
 const saveTheBasket = (cartContent) => {
     localStorage.setItem("basketItems", JSON.stringify(cartContent));
 };  
 
-/* DECLARATION DES FONCTIONS
+// DECLARATION DES FONCTIONS
 //-----------------------------------------------------------------------------------
 
-Fonction qui calcule la quantité et le prix total des articles. 
+/* Fonction qui calcule la quantité et le prix total des articles. 
 A chaque itération de la première boucle on lance une deuxième boucle pour trouver une corresponsance d'ID entre les données de l'API et le panier en localStorage :
 Pour la quantité : Si correspondance alors on ajoute la quantité du produit à la valeur TotalQuantity existante.
 Pour le prix : On prend la quantité du produit trouvé (dans le panier) et on la multiplie par le prix récupéré dans les données API ! et on remplca ces éléments dans le DOM */
@@ -46,6 +44,8 @@ const getTotalQty = () => {
     }
 }
 
+/* Fonction qui utilise la méthode (.find) pour parcourir le tableau dans le localStorage et rechercher une correspondance avec le produit dont on souhaite modifier la quantité.
+Si le produit est trouvé alors on change la quantité dans le localStorage, sinon on ne fait rien */
 const quantityProduct = (product) => {
     let findProduct = basket.find((p) => p.id == product.id && p.color == product.color);
 
@@ -56,6 +56,9 @@ const quantityProduct = (product) => {
     saveTheBasket(basket);
 }
 
+/* Fonction qui va créer un eventListener pour écouter les changements sur chaque input "itemQuantity".
+Pour savoir sur quel produit on doit changer la quantité on récupère les données "id" et "color" de l'élément parent via (Element.closest) et on appelle "quantityProduct() les infos et la nouvelle quantité en paramètre".
+On appelle "getTotalQuantity()" pour afficher les nouveaux totaux Qté Produits et prix */
 const changeQuantityProduct = () => {
     let inputItemQuantity = document.querySelectorAll('.itemQuantity');
 
@@ -77,10 +80,13 @@ const changeQuantityProduct = () => {
     })
 }
 
-// Suppression d'un produit
+/* Fonction qui va créer un eventListener pour écouter les clics sur chaque bouton "supprimer".
+On récupère de nouveau les infos de l'élément à supprimer via (Element.closest).
+Puis on utilise la méthode (.filter) pour parcourir le tableau et ne garder que les éléments demandés.
+Ici on demande à ne garder que les éléments du localStorage qui n'ont pas cet "id" et cette "color", on demande la suppression de cet élément.
+et on sauvegarde les éléments restant sur le localStorage avec "saveTheBasket()" */
 const deleteProduct = () => {
     let deleteButton = document.querySelectorAll(".deleteItem");
-    console.log(deleteButton);
 
     deleteButton.forEach(deleteItem => {
     
@@ -100,8 +106,7 @@ const deleteProduct = () => {
     })
 }
 
-/* Function that injects the contents of the array [basketKanaps] into the code of cart.html
-Fonction qui injecte le contenu du tableau [basketKanaps] dans le code de cart.html */
+// Fonction qui injecte le contenu du tableau [basketKanaps] dans le code de cart.html
 const cartDisplay = () => {
 
     if (basket === null || basket == 0) {
@@ -142,13 +147,12 @@ const cartDisplay = () => {
     };
 }
 
-/* DECLARATION DES VARIABLES GLOBALES ET DE LA FONCTION FETCH
------------------------------------------------------------------------------------ */
+// DECLARATION DES VARIABLES GLOBALES, DE LA FONCTION FETCH ET ACTIVATION DES FONCTIONS
+//-----------------------------------------------------------------------------------
 
 let basket = getFromBasket();
 
-/* Declaration of an array that retrieves informations of the API of localStorage products 
-Déclaration d'un tableau qui récupèrera les informations via l'API des produits du localStorage */
+// Déclaration d'un tableau qui récupèrera les informations via l'API des produits du localStorage 
 let basketKanaps = [];
 
 
@@ -160,18 +164,15 @@ fetch("http://localhost:3000/api/products")
     .then((value) => {
         kanapListApi = value;
     
-        /* Loops the data from the API, and at each iteration a 2nd loop is launched
-        Boucle les données de l'API, et à chaque itération une 2ème boucle se lance */
+        // Boucle les données de l'API, et à chaque itération une 2ème boucle se lance
         for (let i = 0; i < kanapListApi.length; i++) {
             
-            /* At each iteration of the first loop, we look for a match in the localStorage
-            A chaque itération de la première boucle, on recherche une correspondance dans le localStorage */
+            // A chaque itération de la première boucle, on recherche une correspondance dans le localStorage
             for (let j = 0; j < basket.length; j++) {
 
                 if (kanapListApi[i]._id === basket[j].id) {
 
-                    /* If a match has been found, the "basketKanap" object is added to the "basketKanaps" array
-                    Si une correspondance a été trouvé on ajoute l'objet "basketKanap" dans le tableau "basketKanaps" */
+                    // Si une correspondance a été trouvé on ajoute l'objet "basketKanap" dans le tableau "basketKanaps"
                     let basketKanap = {
                         id: basket[j].id,
                         color: basket[j].color,
@@ -190,3 +191,58 @@ fetch("http://localhost:3000/api/products")
         deleteProduct();
     })
 
+
+// PARTIE FORMULAIRE
+//-----------------------------------------------------------------------------------
+
+// Déclaration des ReGex
+let nameRegex = /^[a-zA-Zàâäéèêëïîôöùûüç]+[-']*[a-zA-Zàâäéèêëïîôöùûüç]+$/;
+let addressRegex = /^[a-zA-Z0-9]+[\-a-zA-Zàâäéèêëïîôöùûüç ]+$/;
+let emailRegex = /^[a-zA-Z0-9\.\-_]+[@]{1}[a-zA-Z0-9\-_]+[\.]{1}[a-zA-Zàâäéèêëïîôöùûüç]+$/;
+
+// Déclaration des variables des différents "input" du formaulaire
+let firstName = document.getElementById('firstName');
+let lastName = document.getElementById('lastName');
+let address = document.getElementById('address');
+let city = document.getElementById('city');
+let email = document.getElementById('email');
+
+firstName.addEventListener('change', () => {
+    if (nameRegex.test(firstName.value)) {
+        document.getElementById('firstNameErrorMsg').innerHTML = '';
+    } else {
+        document.getElementById('firstNameErrorMsg').innerHTML = 'Merci de renseigner votre prénom';
+    }
+});
+
+lastName.addEventListener('change', () => {
+    if (nameRegex.test(lastName.value)) {
+        document.getElementById('lastNameErrorMsg').innerHTML = '';
+    } else {
+        document.getElementById('lastNameErrorMsg').innerHTML = 'Merci de renseigner votre Nom';
+    }
+});
+
+address.addEventListener('change', () => {
+    if (addressRegex.test(address.value)) {
+        document.getElementById('addressErrorMsg').innerHTML = '';
+    } else {
+        document.getElementById('addressErrorMsg').innerHTML = 'Merci de renseigner votre adresse postale';
+    }
+});
+
+city.addEventListener('change', () => {
+    if (nameRegex.test(city.value)) {
+        document.getElementById('cityErrorMsg').innerHTML = '';
+    } else {
+        document.getElementById('cityErrorMsg').innerHTML = 'Merci de renseigner votre ville';
+    }
+});
+
+email.addEventListener('change', () => {
+    if (emailRegex.test(email.value)) {
+        document.getElementById('emailErrorMsg').innerHTML = '';
+    } else {
+        document.getElementById('emailErrorMsg').innerHTML = 'Merci de saisir une adresse mail correcte (exemple : jean@gmail.com';
+    }
+});
