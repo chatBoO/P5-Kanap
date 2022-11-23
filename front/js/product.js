@@ -31,9 +31,7 @@ const informationsKanapDisplay = () => {
 
 // Fonction Fetch qui récupère les données du canapé avec l'ID Dynamique récupéré dans l'URL et génère un fichier .JSON
 fetch("http://localhost:3000/api/products/" + id)
-  .then((response) => {
-    return response.json()
-  })
+  .then((response) => response.json())
 
   // Le fichier .json est traité et son contenu stocké dans la variable "informationsKanap" et les couleurs dans "colorsKanap" */
   .then((value) => {

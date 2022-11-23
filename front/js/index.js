@@ -18,13 +18,10 @@ const kanapDisplay = () => {
 
 // Fonction Fetch qui récupère les données des canapés dans l'API et renvoie un fichier .json
 fetch("http://localhost:3000/api/products")
-  .then((response) => {
-    return response.json();
-  })
+  .then((response) => response.json())
 
   // Le fichier .json est traité et son contenu stocké dans la variable "kanapList"
   .then((value) => {
-    console.log(value);
     kanapList = value;
 
     kanapDisplay();

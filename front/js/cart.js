@@ -333,9 +333,7 @@ document.getElementById('order').addEventListener("click", (e)=> {
         })
 
         // On récupère le fichier json
-        .then((response) => {
-            return response.json();
-        })
+        .then((response) => response.json())
 
         // Redirection du visiteur vers confirmation.html avec "orderId" dans l'URL pour pouvoir la récupérer
         .then((value) => {
