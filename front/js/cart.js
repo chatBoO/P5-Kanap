@@ -187,6 +187,7 @@ fetch("http://localhost:3000/api/products")
                 }
             }
         }
+        // Appel des fonctions d'affichage
         cartDisplay();
         changeQuantityProduct();
         deleteProduct();
@@ -218,14 +219,20 @@ let addressErrorMsg = document.getElementById('addressErrorMsg');
 let cityErrorMsg = document.getElementById('cityErrorMsg');
 let emailErrorMsg = document.getElementById('emailErrorMsg');
 
+
 /*AddEventListener pour écouter chaque changement sur les différents "input" du formulaire.
-Si changement détecté, alors on vérifie si la saisie est valide par le Regex selectionné.
-Si c'est bon, le message d'erreur est vide (car sinon il ne part pas), sinon on affiche le message d'erreur */
+Si changement détecté.*/
+
 firstName.addEventListener('change', () => {
+
+    // On vérifie si la saisie est valide par le Regex selectionné.
+    // Si c'est bon, le message d'erreur vaut "Valide".
     if (nameRegex.test(firstName.value)) {
         firstName.style.border = '1px solid green';
         document.getElementById('firstNameErrorMsg').style.color = 'green';
         document.getElementById('firstNameErrorMsg').textContent = "Valide";
+    
+    // Sinon on affiche le message d'erreur
     } else {
         firstName.style.border = '1px solid red';
         document.getElementById('firstNameErrorMsg').style.color = 'red';
@@ -287,20 +294,23 @@ email.addEventListener('change', () => {
 // au clic sur le bouton "Commander !"
 document.getElementById('order').addEventListener("click", (e)=> {
     e.preventDefault();
- 
+    
+    // Si tous les champs sont valides et ne retournent pas d'erreur
     if (firstNameErrorMsg.textContent == "Valide" 
         && lastNameErrorMsg.textContent == "Valide" 
         && addressErrorMsg.textContent == "Valide" 
         && cityErrorMsg.textContent == "Valide" 
         && emailErrorMsg.textContent == "Valide") {
         
+        // Déclaration du tableau qui va recevoir les id des produits dans le panier
         let productsId = [];
-
+        
+        // Boucle For qui intégre les id des produits dans le tableau [productsId]
         for (let products of basket) {
            productsId.push(products.id);
         }
-        console.log(productsId);
 
+        // Déclaration d'un objet "orderClient" qui contient "contact" les coordonnées clients, et "products" les id des produits  
         const orderClient = {
             contact : {
                 firstName: firstName.value,
@@ -312,6 +322,7 @@ document.getElementById('order').addEventListener("click", (e)=> {
             products : productsId,
         }
 
+        // Fonction Fetch qui envoie une requête "POST" de l'objet "orderClient" formaté en JSON
         fetch("http://localhost:3000/api/products/order", {
             method: 'POST',
             body: JSON.stringify(orderClient),
@@ -321,13 +332,13 @@ document.getElementById('order').addEventListener("click", (e)=> {
             }
         })
 
+        // On récupère le fichier json
         .then((response) => {
             return response.json();
         })
 
+        // Redirection du visiteur vers confirmation.html avec "orderId" dans l'URL pour pouvoir la récupérer
         .then((value) => {
-            let test = value
-            console.log(test);
             document.location.href = `confirmation.html?orderId=${value.orderId}`;
         })
 
@@ -336,6 +347,7 @@ document.getElementById('order').addEventListener("click", (e)=> {
         });
          
     } else {
-        alert ("Problème !");
+        alert ("un problème est survenu...");
+        location.reload();
     }
 })
