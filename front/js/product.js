@@ -91,7 +91,7 @@ cartButton.addEventListener("click", () => {
 
   
   // Si "color" n'est pas vide ET que "quantity" est supérieur à 0, on exécute la fonction "addToBasket"
-  if (color != "" && quantity > 0) {
+  if (color != "" && quantity > 0 && quantity <= 100) {
   
     addToBasket({
       id: id,

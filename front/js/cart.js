@@ -69,14 +69,14 @@ const changeQuantityProduct = () => {
             // Pour savoir sur quel produit on doit changer la quantité on récupère les données "id" et "color" de l'élément parent via (Element.closest)
             let retrieveParentData = itemQuantity.closest('.cart__item');
 
-             // On appelle "quantityProduct() les infos et la nouvelle quantité en paramètre".
+             // On appelle "quantityProduct()"" les infos et la nouvelle quantité en paramètre".
             quantityProduct ({
                 id: retrieveParentData.dataset.id,
                 color: retrieveParentData.dataset.color,
                 quantity: Number(e.target.value),
             });
             
-            // On appelle "getTotalQty" pour recalculer et afficher le total des produits ainsi que le prix total.
+            // On appelle "getTotalQty()" pour recalculer et afficher le total des produits ainsi que le prix total.
             getTotalQty();
         });
     })
