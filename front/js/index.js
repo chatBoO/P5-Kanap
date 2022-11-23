@@ -24,7 +24,12 @@ fetch("http://localhost:3000/api/products")
 
   // Le fichier .json est traité et son contenu stocké dans la variable "kanapList"
   .then((value) => {
+    console.log(value);
     kanapList = value;
 
     kanapDisplay();
+  })
+  
+  .catch((error) => {
+    console.log(error.message);
   });
