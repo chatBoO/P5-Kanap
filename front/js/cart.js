@@ -232,7 +232,7 @@ firstName.addEventListener('change', () => {
         document.getElementById('firstNameErrorMsg').style.color = 'green';
         document.getElementById('firstNameErrorMsg').textContent = "Valide";
     
-    // Sinon on affiche le message d'erreur
+    // Sinon on affiche le message d'erreur.
     } else {
         firstName.style.border = '1px solid red';
         document.getElementById('firstNameErrorMsg').style.color = 'red';
@@ -296,11 +296,11 @@ document.getElementById('order').addEventListener("click", (e)=> {
     e.preventDefault();
     
     // Si tous les champs sont valides et ne retournent pas d'erreur
-    if (firstNameErrorMsg.textContent == "Valide" 
-        && lastNameErrorMsg.textContent == "Valide" 
-        && addressErrorMsg.textContent == "Valide" 
-        && cityErrorMsg.textContent == "Valide" 
-        && emailErrorMsg.textContent == "Valide") {
+    if (nameRegex.test(firstName.value) 
+        && nameRegex.test(lastName.value) 
+        && addressRegex.test(address.value)
+        && nameRegex.test(city.value)
+        && emailRegex.test(email.value)) {
         
         // Déclaration du tableau qui va recevoir les id des produits dans le panier
         let productsId = [];
@@ -337,6 +337,7 @@ document.getElementById('order').addEventListener("click", (e)=> {
 
         // Redirection du visiteur vers confirmation.html avec "orderId" dans l'URL pour pouvoir la récupérer
         .then((value) => {
+            localStorage.clear();
             document.location.href = `confirmation.html?orderId=${value.orderId}`;
         })
 
@@ -346,6 +347,5 @@ document.getElementById('order').addEventListener("click", (e)=> {
          
     } else {
         alert ("un problème est survenu...");
-        location.reload();
     }
 })
