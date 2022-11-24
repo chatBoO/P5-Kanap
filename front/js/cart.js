@@ -322,7 +322,7 @@ document.getElementById('order').addEventListener("click", (e)=> {
             products : productsId,
         }
 
-        // Fonction Fetch qui envoie une requête "POST" de l'objet "orderClient" formaté en JSON
+        // Méthode Fetch qui envoie une requête "POST" de l'objet "orderClient" formaté en JSON
         fetch("http://localhost:3000/api/products/order", {
             method: 'POST',
             body: JSON.stringify(orderClient),
@@ -333,19 +333,27 @@ document.getElementById('order').addEventListener("click", (e)=> {
         })
 
         // On récupère le fichier json
-        .then((response) => response.json())
+        .then((response) => {
 
-        // Redirection du visiteur vers confirmation.html avec "orderId" dans l'URL pour pouvoir la récupérer
-        .then((value) => {
-            localStorage.clear();
-            document.location.href = `confirmation.html?orderId=${value.orderId}`;
+            if(response.ok) {
+                response.json()
+
+                // Redirection du visiteur vers confirmation.html avec "orderId" dans l'URL pour pouvoir la récupérer
+                .then((value) => {
+                    localStorage.clear();
+                    document.location.href = `confirmation.html?orderId=${value.orderId}`;
+                })
+
+            } else {
+                console.log('Mauvaise réponse du réseau');
+            }
         })
 
         .catch((error) => {
-            console.log(error.message);
+            console.log("Il y a eu un problème avec l'opération fetch: " + error.message);
         });
          
     } else {
-        alert ("un problème est survenu...");
+        alert ("Un problème est survenu lors de la saisie des données...");
     }
 })
