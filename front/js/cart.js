@@ -84,25 +84,34 @@ const changeQuantityProduct = () => {
 
 // Fonction qui va créer un eventListener avec la boucle "forEach" pour écouter les clics sur chaque bouton "supprimer".
 const deleteProduct = () => {
+
+    // Selection de tous les boutons "deleteItem".
     let deleteButton = document.querySelectorAll(".deleteItem");
 
+    // On boucle sur chacun d'eux pour leur ajouter un ".addEventListener".
     deleteButton.forEach(deleteItem => {
     
         deleteItem.addEventListener("click" , (e) => {
             e.preventDefault();
 
-            // On récupère de nouveau les infos de l'élément à supprimer via (Element.closest).
+            // On récupère l'élément dans lequel on veut supprimer le noeud grâce a "removeChild()" ici la section cart__items.
+            let cartItems = document.querySelector('#cart__items')
+
+            // On récupère l'élément à supprimer via (Element.closest) pour sélectionner l'élément parent du bouton "supprimer".
             let retrieveParentData = deleteItem.closest('.cart__item');
 
-            /* Puis on utilise la méthode (.filter) pour parcourir le tableau et ne garder que les éléments demandés.
-            Ici on demande à ne garder que les éléments du localStorage qui n'ont pas cet "id" et cette "color", on demande la suppression de cet élément.*/
+            // On supprime le noeud du DOM avec la méthode ".removeChild()" avec comme paramètre l'élément à supprimer.
+            cartItems.removeChild(retrieveParentData)
+
+            // /* Puis on utilise la méthode (.filter) pour parcourir le tableau et ne garder que les éléments demandés.
+            // Ici on demande à ne garder que les éléments du localStorage qui n'ont pas cet "id" et cette "color", on demande la suppression de cet élément.*/
             basket = basket.filter( p => p.id !== retrieveParentData.dataset.id || p.color !== retrieveParentData.dataset.color );
-            
-            // On sauvegarde les éléments restant sur le localStorage avec "saveTheBasket()"
+
+            // On sauvegarde les éléments restant sur le localStorage avec "saveTheBasket()".
             saveTheBasket(basket);
 
-            alert("Ce produit a bien été supprimé du panier");
-            location.reload();
+            // Appel de "getTotalQty" pour mettre à jour le prix et les quantités en direct sur le DOM.
+            getTotalQty();
         })
     })
 }
@@ -200,6 +209,74 @@ fetch("http://localhost:3000/api/products")
 
 // PARTIE SAISIE DU FORMULAIRE
 //-----------------------------------------------------------------------------------
+const inputAnalyser = () => {
+    /*AddEventListener pour écouter chaque changement sur les différents "input" du formulaire.
+    Si changement détecté.*/
+    firstName.addEventListener('change', () => {
+
+        // On vérifie si la saisie est valide par le Regex selectionné.
+        // Si c'est bon, le message d'erreur vaut "Valide".
+        if (nameRegex.test(firstName.value)) {
+            firstName.style.border = '1px solid green';
+            document.getElementById('firstNameErrorMsg').style.color = 'green';
+            document.getElementById('firstNameErrorMsg').textContent = "Valide";
+        
+        // Sinon on affiche le message d'erreur.
+        } else {
+            firstName.style.border = '1px solid red';
+            document.getElementById('firstNameErrorMsg').style.color = 'red';
+            document.getElementById('firstNameErrorMsg').innerHTML = 'Merci de renseigner votre prénom';
+        }
+    });
+
+    lastName.addEventListener('change', () => {
+        if (nameRegex.test(lastName.value)) {
+            lastName.style.border = '1px solid green';
+            document.getElementById('lastNameErrorMsg').style.color = 'green';
+            document.getElementById('lastNameErrorMsg').textContent = "Valide";
+        } else {
+            lastName.style.border = '1px solid red';
+            document.getElementById('lastNameErrorMsg').style.color = 'red';
+            document.getElementById('lastNameErrorMsg').innerHTML = 'Merci de renseigner votre Nom';
+        }
+    });
+
+    address.addEventListener('change', () => {
+        if (addressRegex.test(address.value)) {
+            address.style.border = '1px solid green';
+            document.getElementById('addressErrorMsg').style.color = 'green';
+            document.getElementById('addressErrorMsg').textContent = "Valide";
+        } else {
+            address.style.border = '1px solid red';
+            document.getElementById('addressErrorMsg').style.color = 'red';
+            document.getElementById('addressErrorMsg').innerHTML = 'Merci de renseigner votre adresse postale';
+        }
+    });
+
+    city.addEventListener('change', () => {
+        if (nameRegex.test(city.value)) {
+            city.style.border = '1px solid green';
+            document.getElementById('cityErrorMsg').style.color = 'green';
+            document.getElementById('cityErrorMsg').textContent = "Valide";
+        } else {
+            city.style.border = '1px solid red';
+            document.getElementById('cityErrorMsg').style.color = 'red';
+            document.getElementById('cityErrorMsg').innerHTML = 'Merci de renseigner votre ville';
+        }
+    });
+
+    email.addEventListener('change', () => {
+        if (emailRegex.test(email.value)) {
+            email.style.border = '1px solid green';
+            document.getElementById('emailErrorMsg').style.color = 'green';
+            document.getElementById('emailErrorMsg').textContent = "Valide";
+        } else {
+            email.style.border = '1px solid red';
+            document.getElementById('emailErrorMsg').style.color = 'red';
+            document.getElementById('emailErrorMsg').innerHTML = 'Merci de saisir une adresse mail correcte (exemple : jean@gmail.com';
+        }
+    });
+};
 
 // Déclaration des ReGex
 let nameRegex = /^[a-zA-Zàâäéèêëïîôöùûüç][-/a-zA-Zàâäéèêëïîôöùûüç ]+[a-zA-Zàâäéèêëïîôöùûüç]+$/;
@@ -213,147 +290,81 @@ let address = document.getElementById('address');
 let city = document.getElementById('city');
 let email = document.getElementById('email');
 
-let firstNameErrorMsg = document.getElementById('firstNameErrorMsg');
-let lastNameErrorMsg = document.getElementById('lastNameErrorMsg');
-let addressErrorMsg = document.getElementById('addressErrorMsg');
-let cityErrorMsg = document.getElementById('cityErrorMsg');
-let emailErrorMsg = document.getElementById('emailErrorMsg');
-
-
-/*AddEventListener pour écouter chaque changement sur les différents "input" du formulaire.
-Si changement détecté.*/
-
-firstName.addEventListener('change', () => {
-
-    // On vérifie si la saisie est valide par le Regex selectionné.
-    // Si c'est bon, le message d'erreur vaut "Valide".
-    if (nameRegex.test(firstName.value)) {
-        firstName.style.border = '1px solid green';
-        document.getElementById('firstNameErrorMsg').style.color = 'green';
-        document.getElementById('firstNameErrorMsg').textContent = "Valide";
-    
-    // Sinon on affiche le message d'erreur.
-    } else {
-        firstName.style.border = '1px solid red';
-        document.getElementById('firstNameErrorMsg').style.color = 'red';
-        document.getElementById('firstNameErrorMsg').innerHTML = 'Merci de renseigner votre prénom';
-    }
-});
-
-lastName.addEventListener('change', () => {
-    if (nameRegex.test(lastName.value)) {
-        lastName.style.border = '1px solid green';
-        document.getElementById('lastNameErrorMsg').style.color = 'green';
-        document.getElementById('lastNameErrorMsg').textContent = "Valide";
-    } else {
-        lastName.style.border = '1px solid red';
-        document.getElementById('lastNameErrorMsg').style.color = 'red';
-        document.getElementById('lastNameErrorMsg').innerHTML = 'Merci de renseigner votre Nom';
-    }
-});
-
-address.addEventListener('change', () => {
-    if (addressRegex.test(address.value)) {
-        address.style.border = '1px solid green';
-        document.getElementById('addressErrorMsg').style.color = 'green';
-        document.getElementById('addressErrorMsg').textContent = "Valide";
-    } else {
-        address.style.border = '1px solid red';
-        document.getElementById('addressErrorMsg').style.color = 'red';
-        document.getElementById('addressErrorMsg').innerHTML = 'Merci de renseigner votre adresse postale';
-    }
-});
-
-city.addEventListener('change', () => {
-    if (nameRegex.test(city.value)) {
-        city.style.border = '1px solid green';
-        document.getElementById('cityErrorMsg').style.color = 'green';
-        document.getElementById('cityErrorMsg').textContent = "Valide";
-    } else {
-        city.style.border = '1px solid red';
-        document.getElementById('cityErrorMsg').style.color = 'red';
-        document.getElementById('cityErrorMsg').innerHTML = 'Merci de renseigner votre ville';
-    }
-});
-
-email.addEventListener('change', () => {
-    if (emailRegex.test(email.value)) {
-        email.style.border = '1px solid green';
-        document.getElementById('emailErrorMsg').style.color = 'green';
-        document.getElementById('emailErrorMsg').textContent = "Valide";
-    } else {
-        email.style.border = '1px solid red';
-        document.getElementById('emailErrorMsg').style.color = 'red';
-        document.getElementById('emailErrorMsg').innerHTML = 'Merci de saisir une adresse mail correcte (exemple : jean@gmail.com';
-    }
-});
+inputAnalyser();
 
 // ENREGISTREMENT ET ENVOI DES INFORMATIONS DU FORMULAIRE ET DU PANIER
 //------------------------------------------------------------------------------------
+const postForm = () => {
+
+    // Déclaration du tableau qui va recevoir les id des produits dans le panier
+    let productsId = [];
+        
+    // Boucle For qui intégre les id des produits dans le tableau [productsId]
+    for (let products of basket) {
+       productsId.push(products.id);
+    }
+
+    // Déclaration d'un objet "orderClient" qui contient "contact" les coordonnées clients, et "products" les id des produits  
+    const orderClient = {
+        contact : {
+            firstName: firstName.value,
+            lastName: lastName.value,
+            address: address.value,
+            city: city.value,
+            email: email.value,
+        },
+        products : productsId,
+    }
+    
+    // Méthode Fetch qui envoie une requête "POST" de l'objet "orderClient" formaté en JSON
+    fetch("http://localhost:3000/api/products/order", {
+        method: 'POST',
+        body: JSON.stringify(orderClient),
+        headers: {
+            'Accept': 'application/json', 
+            "Content-Type": "application/json" 
+        }
+    })
+
+    // On récupère le fichier json
+    .then((response) => {
+
+        if(response.ok) {
+            response.json()
+
+            // Redirection du visiteur vers confirmation.html avec "orderId" dans l'URL pour pouvoir la récupérer
+            .then((value) => {
+                localStorage.clear();
+                document.location.href = `confirmation.html?orderId=${value.orderId}`;
+            })
+
+        } else {
+            console.log('Mauvaise réponse du réseau');
+        }
+    })
+
+    .catch((error) => {
+        console.log("Il y a eu un problème avec l'opération fetch: " + error.message);
+    });
+};
 
 // au clic sur le bouton "Commander !"
 document.getElementById('order').addEventListener("click", (e)=> {
     e.preventDefault();
+    if (basket === null || basket == 0)
+    {
+        alert("Votre panier est vide, vous ne pouvez pas passer commande !");
     
     // Si tous les champs sont valides et ne retournent pas d'erreur
-    if (nameRegex.test(firstName.value) 
-        && nameRegex.test(lastName.value) 
-        && addressRegex.test(address.value)
-        && nameRegex.test(city.value)
-        && emailRegex.test(email.value)) {
-        
-        // Déclaration du tableau qui va recevoir les id des produits dans le panier
-        let productsId = [];
-        
-        // Boucle For qui intégre les id des produits dans le tableau [productsId]
-        for (let products of basket) {
-           productsId.push(products.id);
-        }
+    } else if (nameRegex.test(firstName.value) 
+                && nameRegex.test(lastName.value) 
+                && addressRegex.test(address.value)
+                && nameRegex.test(city.value)
+                && emailRegex.test(email.value)) {
 
-        // Déclaration d'un objet "orderClient" qui contient "contact" les coordonnées clients, et "products" les id des produits  
-        const orderClient = {
-            contact : {
-                firstName: firstName.value,
-                lastName: lastName.value,
-                address: address.value,
-                city: city.value,
-                email: email.value,
-            },
-            products : productsId,
-        }
-
-        // Méthode Fetch qui envoie une requête "POST" de l'objet "orderClient" formaté en JSON
-        fetch("http://localhost:3000/api/products/order", {
-            method: 'POST',
-            body: JSON.stringify(orderClient),
-            headers: {
-                'Accept': 'application/json', 
-                "Content-Type": "application/json" 
-            }
-        })
-
-        // On récupère le fichier json
-        .then((response) => {
-
-            if(response.ok) {
-                response.json()
-
-                // Redirection du visiteur vers confirmation.html avec "orderId" dans l'URL pour pouvoir la récupérer
-                .then((value) => {
-                    localStorage.clear();
-                    document.location.href = `confirmation.html?orderId=${value.orderId}`;
-                })
+                postForm();
 
             } else {
-                console.log('Mauvaise réponse du réseau');
+                alert ("Un problème est survenu lors de la saisie des données...");
             }
-        })
-
-        .catch((error) => {
-            console.log("Il y a eu un problème avec l'opération fetch: " + error.message);
-        });
-         
-    } else {
-        alert ("Un problème est survenu lors de la saisie des données...");
-    }
 })
