@@ -28,21 +28,18 @@ const getTotalQty = () => {
 
     // A chaque itération de la première boucle on lance une deuxième boucle pour trouver une corresponsance d'ID entre les données de l'API et le panier en localStorage :
     for (let i = 0; i < basketKanaps.length; i++) {
+  
+        // Pour la quantité : Si une correspodance est trouvée alors on ajoute la quantité du produit à la valeur TotalQuantity existante.
+        totalQuantity += basketKanaps[i].quantity;
 
-        for (let j = 0; j < basket.length; j++) {
-            
-            if (basketKanaps[i].id === basket[j].id) {
-                // Pour la quantité : Si une correspodance est trouvée alors on ajoute la quantité du produit à la valeur TotalQuantity existante.
-                totalQuantity += basket[j].quantity;
+        // Pour le prix : On prend la quantité du produit trouvé (dans le panier) et on la multiplie par le prix récupéré dans les données API !
+        totalPrice += basketKanaps[i].quantity * basketKanaps[i].price;
 
-                // Pour le prix : On prend la quantité du produit trouvé (dans le panier) et on la multiplie par le prix récupéré dans les données API !
-                totalPrice += basket[j].quantity * basketKanaps[i].price;
-            }   
-        }
-        // On affiche les éléments de quantité totale d'articles et le prix total dans le DOM.
-        document.getElementById("totalQuantity").textContent = totalQuantity;
-        document.getElementById("totalPrice").textContent = totalPrice;
     }
+
+    // On affiche les éléments de quantité totale d'articles et le prix total dans le DOM.
+    document.getElementById("totalQuantity").textContent = totalQuantity;
+    document.getElementById("totalPrice").textContent = totalPrice;
 }
 
 /* Fonction qui utilise la méthode (.find) pour parcourir le tableau dans le localStorage et rechercher une correspondance avec le produit dont on souhaite modifier la quantité.
@@ -50,8 +47,14 @@ Si le produit est trouvé alors on change la quantité dans le localStorage, sin
 const quantityProduct = (product) => {
     let findProduct = basket.find((p) => p.id == product.id && p.color == product.color);
 
+    let findkanap = basketKanaps.find((p) => p.id == product.id && p.color == product.color);
+
     if (findProduct != undefined) {
         findProduct.quantity = product.quantity;
+    }
+
+    if (findkanap != undefined) {
+        findkanap.quantity = product.quantity;
     }
     
     saveTheBasket(basket);
@@ -101,11 +104,12 @@ const deleteProduct = () => {
             let retrieveParentData = deleteItem.closest('.cart__item');
 
             // On supprime le noeud du DOM avec la méthode ".removeChild()" avec comme paramètre l'élément à supprimer.
-            cartItems.removeChild(retrieveParentData)
+            cartItems.removeChild(retrieveParentData);
 
             // /* Puis on utilise la méthode (.filter) pour parcourir le tableau et ne garder que les éléments demandés.
             // Ici on demande à ne garder que les éléments du localStorage qui n'ont pas cet "id" et cette "color", on demande la suppression de cet élément.*/
             basket = basket.filter( p => p.id !== retrieveParentData.dataset.id || p.color !== retrieveParentData.dataset.color );
+            basketKanaps = basketKanaps.filter( p => p.id !== retrieveParentData.dataset.id || p.color !== retrieveParentData.dataset.color );
 
             // On sauvegarde les éléments restant sur le localStorage avec "saveTheBasket()".
             saveTheBasket(basket);
