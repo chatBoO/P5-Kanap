@@ -124,6 +124,7 @@ cartButton.addEventListener("click", () => {
     alert("Produit ajouté au panier avec succès");
 
   } else {
+    
     alert("Veuillez sélectionner une couleur et une quantité (1 - 100)");
   }
 });

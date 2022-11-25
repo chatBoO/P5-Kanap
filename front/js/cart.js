@@ -34,7 +34,6 @@ const getTotalQty = () => {
 
         // Pour le prix : On prend la quantité du produit trouvé (dans le panier) et on la multiplie par le prix récupéré dans les données API !
         totalPrice += basketKanaps[i].quantity * basketKanaps[i].price;
-
     }
 
     // On affiche les éléments de quantité totale d'articles et le prix total dans le DOM.
@@ -72,7 +71,7 @@ const changeQuantityProduct = () => {
             // Pour savoir sur quel produit on doit changer la quantité on récupère les données "id" et "color" de l'élément parent via (Element.closest)
             let retrieveParentData = itemQuantity.closest('.cart__item');
 
-             // On appelle "quantityProduct()"" les infos et la nouvelle quantité en paramètre".
+             // On appelle "quantityProduct()" avec les infos et la nouvelle quantité en paramètre".
             quantityProduct ({
                 id: retrieveParentData.dataset.id,
                 color: retrieveParentData.dataset.color,
@@ -109,6 +108,8 @@ const deleteProduct = () => {
             // /* Puis on utilise la méthode (.filter) pour parcourir le tableau et ne garder que les éléments demandés.
             // Ici on demande à ne garder que les éléments du localStorage qui n'ont pas cet "id" et cette "color", on demande la suppression de cet élément.*/
             basket = basket.filter( p => p.id !== retrieveParentData.dataset.id || p.color !== retrieveParentData.dataset.color );
+
+            // Même chose avec notre tableau basketKanaps.
             basketKanaps = basketKanaps.filter( p => p.id !== retrieveParentData.dataset.id || p.color !== retrieveParentData.dataset.color );
 
             // On sauvegarde les éléments restant sur le localStorage avec "saveTheBasket()".
