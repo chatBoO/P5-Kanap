@@ -76,20 +76,20 @@ const getFromBasket = () => {
   }
 };
 
-// Fonction qui appelle getFromBasket pour récupérér les données du panier dans le localStorage.
-const addToBasket = (product) => {
-  let basket = getFromBasket();
+let basket = getFromBasket();
 
-  // Vérifie si un canapé stocké dans le LocalStorage a déjà le même ID et la même couleur, si c'est pas le cas alors retourne : "undefined".
+// Fonction qui va ajouter des produits dans le panier (localStorage)
+const addToBasket = (product) => {
+ 
+  // Vérifie si un canapé stocké dans le LocalStorage (variable basket) a déjà le même ID et la même couleur, si c'est pas le cas alors retourne : "undefined".
   let findProduct = basket.find((p) => p.id == product.id && p.color == product.color);
 
   // Si le produit existe déjà dans le localStorage avec le même id et la même couleur alors on incrémente la quatité.
   if (findProduct != undefined) {
     findProduct.quantity += product.quantity;
     
-  // Sinon le resultat est "undefined" et donc le produit n'existe pas donc on rajoute le produit.
+  // Sinon le resultat est "undefined" et donc le produit n'existe pas donc on rajoute le produit au tableau "basket"
   } else {
-    product.quantity = product.quantity;
     basket.push(product);
   }
 
@@ -98,12 +98,22 @@ const addToBasket = (product) => {
 
 // Création d'un évènement au clic sur le bouton "ajouter au panier".
 cartButton.addEventListener("click", () => {
+
   let color = document.querySelector("#colors").value;
   let quantity = document.querySelector("#quantity").value;
 
-  
+  if (color != "" && quantity <= 0 || quantity > 100) {
+
+    alert("Quantité invalide, selectionnez une quantité comprise entre 1 - 100");
+  }
+
+  else if (color == "" && quantity > 0 && quantity <= 100) {
+    
+    alert("Vous n'avez pas sélectionné la couleur de votre produit");
+  }
+
   // Si "color" n'est pas vide ET que "quantity" est supérieur à 0, on exécute la fonction "addToBasket".
-  if (color != "" && quantity > 0 && quantity <= 100) {
+  else if (color != "" && quantity > 0 && quantity <= 100) {
   
     addToBasket({
       id: id,
@@ -114,6 +124,6 @@ cartButton.addEventListener("click", () => {
     alert("Produit ajouté au panier avec succès");
 
   } else {
-    alert("Veuillez choisir une couleur et une quantité");
+    alert("Veuillez sélectionner une couleur et une quantité (1 - 100)");
   }
 });
