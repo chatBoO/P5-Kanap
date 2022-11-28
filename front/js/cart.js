@@ -292,9 +292,9 @@ const inputAnalyser = () => {
 };
 
 // Déclaration des ReGex.
-let nameRegex = /^[a-zA-Zàâäéèêëïîôöùûüç][-/a-zA-Zàâäéèêëïîôöùûüç ]+[a-zA-Zàâäéèêëïîôöùûüç]+$/;
+let nameRegex = /^[a-zA-Zàâäéèêëïîôöùûüç][-/a-zA-Zàâäéèêëïîôöùûüç ]*[a-zA-Zàâäéèêëïîôöùûüç]+$/;
 let addressRegex = /^[a-zA-Z0-9]+[-a-zA-Zàâäéèêëïîôöùûüç ]+[a-zA-Z]$/;
-let emailRegex = /^[a-zA-Z0-9][-_a-zA-Z0-9àâäéèêëïîôöùûüç ]+[@]{1}[a-zA-Z0-9\-_]+[\.]{1}[a-z]{2,5}$/;
+let emailRegex = /^[a-zA-Z0-9][-_a-zA-Z0-9àâäéèêëïîôöùûüç ]+[@]{1}[a-zA-Z0-9]+[\.]{1}[a-z]{2,5}$/;
 
 // Déclaration des variables des différents "input" du formaulaire.
 let firstName = document.getElementById('firstName');
