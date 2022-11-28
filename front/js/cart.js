@@ -71,13 +71,21 @@ const changeQuantityProduct = () => {
             // Pour savoir sur quel produit on doit changer la quantité on récupère les données "id" et "color" de l'élément parent via (Element.closest).
             let retrieveParentData = itemQuantity.closest('.cart__item');
 
+            if (Number(e.target.value) <= 0) {
+                alert ('Pour supprimer un produit, veuillez cliquer sur le bouton "Supprimer"');
+            }
+
+            else if (Number(e.target.value) >= 100) {
+                alert ('Le maximum pour cet article est de 100 pièces');
+            }
+
              // On appelle "quantityProduct()" avec les infos et la nouvelle quantité en paramètre".
             quantityProduct ({
                 id: retrieveParentData.dataset.id,
                 color: retrieveParentData.dataset.color,
                 quantity: Number(e.target.value),
             });
-            
+
             // On appelle "getTotalQty()" pour recalculer et afficher le total des produits ainsi que le prix total.
             getTotalQty();
         });
