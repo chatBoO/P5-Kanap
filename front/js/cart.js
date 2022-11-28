@@ -26,14 +26,14 @@ const getTotalQty = () => {
     let totalQuantity = 0;
     let totalPrice = 0;
 
-    // A chaque itération de la première boucle on lance une deuxième boucle pour trouver une corresponsance d'ID entre les données de l'API et le panier en localStorage :
-    for (let i = 0; i < basketKanaps.length; i++) {
+        // boucle "for of" sur basketKanaps.
+        for (let product of basketKanaps){
   
-        // Pour la quantité : Si une correspodance est trouvée alors on ajoute la quantité du produit à la valeur TotalQuantity existante.
-        totalQuantity += basketKanaps[i].quantity;
+        // Pour la quantité : on ajoute la quantité de chaque produit à la valeur TotalQuantity existante.
+        totalQuantity += product.quantity;
 
-        // Pour le prix : On prend la quantité du produit trouvé (dans le panier) et on la multiplie par le prix récupéré dans les données API !
-        totalPrice += basketKanaps[i].quantity * basketKanaps[i].price;
+        // Pour le prix : On ajoute la quantité de chaque produit et on la multiplie par le prix.
+        totalPrice += product.quantity * product.price;
     }
 
     // On affiche les éléments de quantité totale d'articles et le prix total dans le DOM.
@@ -41,16 +41,16 @@ const getTotalQty = () => {
     document.getElementById("totalPrice").textContent = totalPrice;
 }
 
-/* Fonction qui utilise la méthode (.find) pour parcourir le tableau dans le localStorage et rechercher une correspondance avec le produit dont on souhaite modifier la quantité.
-Si le produit est trouvé alors on change la quantité dans le localStorage, sinon on ne fait rien */
+/* Fonction qui utilise la méthode (.find) pour parcourir nos 2 tableaux le localStorage et "basketKanaps" et rechercher une correspondance avec le produit "product" dont on souhaite modifier la quantité.
+Si le produit est trouvé alors on change la quantité dans les tableaux, sinon on ne fait rien */
 const quantityProduct = (product) => {
     let findProduct = basket.find((p) => p.id == product.id && p.color == product.color);
-
-    let findkanap = basketKanaps.find((p) => p.id == product.id && p.color == product.color);
 
     if (findProduct != undefined) {
         findProduct.quantity = product.quantity;
     }
+
+    let findkanap = basketKanaps.find((p) => p.id == product.id && p.color == product.color);
 
     if (findkanap != undefined) {
         findkanap.quantity = product.quantity;
@@ -112,7 +112,7 @@ const deleteProduct = () => {
             // Même chose avec notre tableau basketKanaps.
             basketKanaps = basketKanaps.filter( p => p.id !== retrieveParentData.dataset.id || p.color !== retrieveParentData.dataset.color );
 
-            // On sauvegarde les éléments restant sur le localStorage avec "saveTheBasket()".
+            // On sauvegarde les éléments restants sur le localStorage avec "saveTheBasket()".
             saveTheBasket(basket);
 
             // Appel de "getTotalQty" pour mettre à jour le prix et les quantités en direct sur le DOM.
