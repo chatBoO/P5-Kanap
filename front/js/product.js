@@ -1,6 +1,6 @@
 // PARTIE QUI AFFICHE LES INFORMATIONS SUR LA PAGE product.html 
 //--------------------------------------------------------------------------------
-// Fonction qui inétègre les différentes données du canapé dans la page product.html
+// Fonction qui intègre les différentes données du canapé dans la page product.html
 const informationsKanapDisplay = () => {
   document.querySelector(".item__img").innerHTML = `<img src="${informationsKanap.imageUrl}" alt="${informationsKanap.altTxt}">`;
   document.querySelector("#title").innerHTML = informationsKanap.name;
@@ -60,12 +60,12 @@ fetch("http://localhost:3000/api/products/" + id)
 // PARTIE QUI TRAITE ET ENREGISTRE LES DONNÉES DANS LE localStorage
 //--------------------------------------------------------------------------------
 
-// Fonction qui sauvegarde les données du panier dans le LocalStorage.
+// Fonction qui sauvegarde les données du panier (LocalStorage).
 const saveTheBasket = (cartContent) => {
   localStorage.setItem("basketItems", JSON.stringify(cartContent));
 };
 
-// Fonction qui récupère les données du panier dans le LocalStorage.
+// Fonction qui récupère les données du panier(LocalStorage).
 const getFromBasket = () => {
   let basket = localStorage.getItem("basketItems");
 
@@ -78,7 +78,7 @@ const getFromBasket = () => {
 
 let basket = getFromBasket();
 
-// Fonction qui va ajouter des produits dans le panier (localStorage)
+// Fonction qui va ajouter des produits dans le panier (localStorage).
 const addToBasket = (product) => {
  
   // Vérifie si un canapé stocké dans le LocalStorage (variable basket) a déjà le même ID et la même couleur, si c'est pas le cas alors retourne : "undefined".
@@ -88,7 +88,7 @@ const addToBasket = (product) => {
   if (findProduct != undefined) {
     findProduct.quantity += product.quantity;
     
-  // Sinon le resultat est "undefined" et donc le produit n'existe pas donc on rajoute le produit au tableau "basket"
+  // Sinon le resultat est "undefined" et donc le produit n'existe pas donc on le rajoute au tableau "basket".
   } else {
     basket.push(product);
   }

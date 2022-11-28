@@ -32,7 +32,7 @@ fetch("http://localhost:3000/api/products")
 
   .then((response) => {
 
-    //On vérifie que le promesse est résolue.
+    //On vérifie que la promesse est résolue.
     if(response.ok) {
 
       // SI elle est est résolue alors on récupère le fichier .json qui contient les données.

@@ -1,7 +1,7 @@
 //DECLARATION DES FONCTIONS DE BASE POUR RECUPERER ET ECRIRE DANS LE LOCAL STORAGE
 //---------------------------------------------------------------------------------
 
-// Fonction qui récupère les données du panier dans le LocalStorage.
+// Fonction qui récupère les données du LocalStorage.
 const getFromBasket = () => {
     let basket = localStorage.getItem("basketItems");
 
@@ -13,7 +13,7 @@ const getFromBasket = () => {
     }
 };
 
-// Fonction qui sauvegarde les données du panier dans le LocalStorage.
+// Fonction qui sauvegarde les données du panier du LocalStorage.
 const saveTheBasket = (cartContent) => {
     localStorage.setItem("basketItems", JSON.stringify(cartContent));
 };  
@@ -68,7 +68,7 @@ const changeQuantityProduct = () => {
         itemQuantity.addEventListener('change', (e) => {
             e.preventDefault();
 
-            // Pour savoir sur quel produit on doit changer la quantité on récupère les données "id" et "color" de l'élément parent via (Element.closest)
+            // Pour savoir sur quel produit on doit changer la quantité on récupère les données "id" et "color" de l'élément parent via (Element.closest).
             let retrieveParentData = itemQuantity.closest('.cart__item');
 
              // On appelle "quantityProduct()" avec les infos et la nouvelle quantité en paramètre".
@@ -106,7 +106,7 @@ const deleteProduct = () => {
             cartItems.removeChild(retrieveParentData);
 
             // /* Puis on utilise la méthode (.filter) pour parcourir le tableau et ne garder que les éléments demandés.
-            // Ici on demande à ne garder que les éléments du localStorage qui n'ont pas cet "id" et cette "color", on demande la suppression de cet élément.*/
+            // Ici on demande à ne garder que les éléments du localStorage qui n'ont pas cet "id" et cette "color", on demande donc la suppression de cet élément.*/
             basket = basket.filter( p => p.id !== retrieveParentData.dataset.id || p.color !== retrieveParentData.dataset.color );
 
             // Même chose avec notre tableau basketKanaps.
@@ -167,7 +167,7 @@ const cartDisplay = () => {
 
 let basket = getFromBasket();
 
-// Déclaration d'un tableau qui récupèrera les informations via l'API des produits du localStorage 
+// Déclaration d'un tableau qui récupèrera les informations via l'API des produits du localStorage.
 let basketKanaps = [];
 
 
@@ -179,15 +179,15 @@ fetch("http://localhost:3000/api/products")
     .then((value) => {
         kanapListApi = value;
     
-        // Boucle les données de l'API, et à chaque itération une 2ème boucle se lance
+        // Boucle les données de l'API, et à chaque itération une 2ème boucle se lance.
         for (let i = 0; i < kanapListApi.length; i++) {
             
-            // A chaque itération de la première boucle, on recherche une correspondance dans le localStorage
+            // A chaque itération de la première boucle, on recherche une correspondance dans le localStorage.
             for (let j = 0; j < basket.length; j++) {
 
                 if (kanapListApi[i]._id === basket[j].id) {
 
-                    // Si une correspondance a été trouvé on ajoute l'objet "basketKanap" dans le tableau "basketKanaps"
+                    // Si une correspondance a été trouvé on ajoute l'objet "basketKanap" dans le tableau "basketKanaps".
                     let basketKanap = {
                         id: basket[j].id,
                         color: basket[j].color,
@@ -201,7 +201,7 @@ fetch("http://localhost:3000/api/products")
                 }
             }
         }
-        // Appel des fonctions d'affichage
+        // Appel des fonctions d'affichage.
         cartDisplay();
         changeQuantityProduct();
         deleteProduct();
@@ -215,11 +215,11 @@ fetch("http://localhost:3000/api/products")
 // PARTIE SAISIE DU FORMULAIRE
 //-----------------------------------------------------------------------------------
 const inputAnalyser = () => {
-    /*AddEventListener pour écouter chaque changement sur les différents "input" du formulaire.
-    Si changement détecté.*/
+    //AddEventListener pour écouter chaque changement sur les différents "input" du formulaire.
+    // Si changement détecté :
     firstName.addEventListener('change', () => {
 
-        // On vérifie si la saisie est valide par le Regex selectionné.
+        // On vérifie si la saisie est valide par le RegEx selectionné.
         // Si c'est bon, le message d'erreur vaut "Valide".
         if (nameRegex.test(firstName.value)) {
             firstName.style.border = '1px solid green';
@@ -283,12 +283,12 @@ const inputAnalyser = () => {
     });
 };
 
-// Déclaration des ReGex
+// Déclaration des ReGex.
 let nameRegex = /^[a-zA-Zàâäéèêëïîôöùûüç][-/a-zA-Zàâäéèêëïîôöùûüç ]+[a-zA-Zàâäéèêëïîôöùûüç]+$/;
 let addressRegex = /^[a-zA-Z0-9]+[-a-zA-Zàâäéèêëïîôöùûüç ]+[a-zA-Z]$/;
 let emailRegex = /^[a-zA-Z0-9][-_a-zA-Z0-9àâäéèêëïîôöùûüç ]+[@]{1}[a-zA-Z0-9\-_]+[\.]{1}[a-z]{2,5}$/;
 
-// Déclaration des variables des différents "input" du formaulaire
+// Déclaration des variables des différents "input" du formaulaire.
 let firstName = document.getElementById('firstName');
 let lastName = document.getElementById('lastName');
 let address = document.getElementById('address');
@@ -301,15 +301,15 @@ inputAnalyser();
 //------------------------------------------------------------------------------------
 const postForm = () => {
 
-    // Déclaration du tableau qui va recevoir les id des produits dans le panier
+    // Déclaration du tableau qui va recevoir les id des produits dans le panier.
     let productsId = [];
         
-    // Boucle For qui intégre les id des produits dans le tableau [productsId]
+    // Boucle For qui intégre les id des produits dans le tableau [productsId].
     for (let products of basket) {
        productsId.push(products.id);
     }
 
-    // Déclaration d'un objet "orderClient" qui contient "contact" les coordonnées clients, et "products" les id des produits  
+    // Déclaration d'un objet "orderClient" qui contient "contact" les coordonnées clients, et "products" les id des produits.
     const orderClient = {
         contact : {
             firstName: firstName.value,
@@ -331,13 +331,13 @@ const postForm = () => {
         }
     })
 
-    // On récupère le fichier json
+    // On récupère le fichier json.
     .then((response) => {
 
         if(response.ok) {
             response.json()
 
-            // Redirection du visiteur vers confirmation.html avec "orderId" dans l'URL pour pouvoir la récupérer
+            // Redirection du visiteur vers confirmation.html avec "orderId" dans l'URL pour pouvoir la récupérer.
             .then((value) => {
                 localStorage.clear();
                 document.location.href = `confirmation.html?orderId=${value.orderId}`;
@@ -360,13 +360,14 @@ document.getElementById('order').addEventListener("click", (e)=> {
     {
         alert("Votre panier est vide, vous ne pouvez pas passer commande !");
     
-    // Si tous les champs sont valides et ne retournent pas d'erreur
+    // Si tous les champs sont valides et ne retournent pas d'erreur :
     } else if (nameRegex.test(firstName.value) 
                 && nameRegex.test(lastName.value) 
                 && addressRegex.test(address.value)
                 && nameRegex.test(city.value)
                 && emailRegex.test(email.value)) {
-
+                
+                // On appel "postForm()" pour l'envoi du formulaire. 
                 postForm();
 
             } else {
