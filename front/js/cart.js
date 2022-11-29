@@ -132,7 +132,7 @@ const deleteProduct = () => {
 // Fonction qui injecte le contenu du tableau [basketKanaps] dans le code de cart.html
 const cartDisplay = () => {
 
-    if (basket === null || basket == 0) {
+    if (basketKanaps === null || basketKanaps == 0) {
         const emptyCart = `<h2 style="text-align: center">Désolé mais votre panier est vide... </h2> <p style="text-align: center"><a href="../html/index.html">Continuer mon shopping</a></p>`;
         document.getElementById("cart__items").innerHTML = emptyCart;
         
