@@ -86,11 +86,26 @@ const addToBasket = (product) => {
 
   // Si le produit existe déjà dans le localStorage avec le même id et la même couleur alors on incrémente la quatité.
   if (findProduct != undefined) {
-    findProduct.quantity += product.quantity;
+
+    if (findProduct.quantity >= 100) {
+      alert ('Vous avez déjà atteint la quantité maximale autorisée pour ce produit');
+
+    } else if (findProduct.quantity < 100) {
+        findProduct.quantity += product.quantity;
+
+        if (findProduct.quantity > 100) {
+          alert ('Vous avez dépassé la quantité maximale autorisée de ce produit dans votre panier, la nouvelle quantité est de 100');
+          findProduct.quantity = 100;
+          
+        } else {
+            alert ('La quantité du produit a été mise à jour avec succès !');
+          }
+      }
     
-  // Sinon le resultat est "undefined" et donc le produit n'existe pas donc on le rajoute au tableau "basket".
+    // Sinon le resultat est "undefined" et donc le produit n'existe pas donc on le rajoute au tableau "basket".
   } else {
     basket.push(product);
+    alert ('Le produit a bien été ajouté dans votre panier !');
   }
 
   saveTheBasket(basket);
@@ -120,8 +135,6 @@ cartButton.addEventListener("click", () => {
       color: color,
       quantity: Number(quantity),
     });
-
-    alert("Produit ajouté au panier avec succès");
 
   } else {
     

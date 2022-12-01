@@ -73,18 +73,34 @@ const changeQuantityProduct = () => {
 
             if (Number(e.target.value) <= 0) {
                 alert ('Pour supprimer un produit, veuillez cliquer sur le bouton "Supprimer"');
+                quantityProduct ({
+                    id: retrieveParentData.dataset.id,
+                    color: retrieveParentData.dataset.color,
+                    quantity: 1
+                });
+
+                itemQuantity.value = 1;
             }
 
-            else if (Number(e.target.value) >= 100) {
+            else if (Number(e.target.value) > 100) {
                 alert ('Le maximum pour cet article est de 100 pièces');
+                quantityProduct ({
+                    id: retrieveParentData.dataset.id,
+                    color: retrieveParentData.dataset.color,
+                    quantity: 100
+                });
+                
+                itemQuantity.value = 100;
             }
 
-             // On appelle "quantityProduct()" avec les infos et la nouvelle quantité en paramètre".
-            quantityProduct ({
-                id: retrieveParentData.dataset.id,
-                color: retrieveParentData.dataset.color,
-                quantity: Number(e.target.value),
-            });
+            else {
+                // On appelle "quantityProduct()" avec les infos et la nouvelle quantité en paramètre".
+                quantityProduct ({
+                    id: retrieveParentData.dataset.id,
+                    color: retrieveParentData.dataset.color,
+                    quantity: Number(e.target.value)
+                });
+            }
 
             // On appelle "getTotalQty()" pour recalculer et afficher le total des produits ainsi que le prix total.
             getTotalQty();
@@ -286,7 +302,7 @@ const inputAnalyser = () => {
         } else {
             email.style.border = '1px solid red';
             document.getElementById('emailErrorMsg').style.color = 'red';
-            document.getElementById('emailErrorMsg').innerHTML = 'Merci de saisir une adresse mail correcte (exemple : jean@gmail.com';
+            document.getElementById('emailErrorMsg').innerHTML = 'Merci de saisir une adresse mail correcte (exemple : jean@gmail.com)';
         }
     });
 };
