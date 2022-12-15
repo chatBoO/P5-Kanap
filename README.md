@@ -5,7 +5,7 @@ But : A partir d'une API déjà implantée et un site statique, transformer ce d
 Mise en place d'un système de Panier, et de Regex afin de vérifier les informations saisies.
 
 Prérequis back-end
-Vous aurez besoin d'avoir Node et d'être npminstallé localement sur votre machine.
+Vous aurez besoin d'avoir Node et "npm" installé localement sur votre machine.
 
 Installation back-end
 
